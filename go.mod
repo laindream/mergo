@@ -1,4 +1,4 @@
-module dario.cat/mergo
+module github.com/laindream/mergo
 
 go 1.13
 
