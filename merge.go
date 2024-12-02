@@ -168,7 +168,7 @@ func deepMerge(dst, src reflect.Value, visited map[uintptr]*visit, depth int, co
 							return fmt.Errorf("cannot override two slices with different type (%s, %s)", srcSlice.Type(), dstSlice.Type())
 						}
 						dstSlice = srcSlice
-					} else if config.AppendSlice {
+					} else if config.AppendSlice && !isEmptyValue(srcSlice, !config.ShouldNotDereference) {
 						if srcSlice.Type() != dstSlice.Type() {
 							return fmt.Errorf("cannot append two slices with different type (%s, %s)", srcSlice.Type(), dstSlice.Type())
 						}
@@ -228,7 +228,7 @@ func deepMerge(dst, src reflect.Value, visited map[uintptr]*visit, depth int, co
 		}
 		if (!isEmptyValue(src, !config.ShouldNotDereference) || overwriteWithEmptySrc || overwriteSliceWithEmptySrc) && (overwrite || isEmptyValue(dst, !config.ShouldNotDereference)) && !config.AppendSlice && !sliceDeepCopy {
 			dst.Set(src)
-		} else if config.AppendSlice {
+		} else if config.AppendSlice && !isEmptyValue(src, !config.ShouldNotDereference) {
 			if src.Type() != dst.Type() {
 				return fmt.Errorf("cannot append two slice with different type (%s, %s)", src.Type(), dst.Type())
 			}
